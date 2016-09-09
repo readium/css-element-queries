@@ -124,10 +124,10 @@
             element.resizeSensor.style.cssText = style;
             element.resizeSensor.innerHTML =
                 '<div class="resize-sensor-expand" style="' + style + '">' +
-                    '<div style="' + styleChild + '"></div>' +
+                    '<div style="' + styleChild + '" class="resize-sensor-inner"></div>' +
                 '</div>' +
                 '<div class="resize-sensor-shrink" style="' + style + '">' +
-                    '<div style="' + styleChild + ' width: 200%; height: 200%"></div>' +
+                    '<div style="' + styleChild + ' width: 200%; height: 200%" class="resize-sensor-inner"></div>' +
                 '</div>';
             element.appendChild(element.resizeSensor);
 
@@ -154,14 +154,10 @@
             var dirty = false;
 
             var dirtyChecking = function() {
-                if (!element.resizedAttached) return;
-
-                if (dirty) {
+                if (dirty && element.resizedAttached) {
                     element.resizedAttached.call();
-                    dirty = false;
                 }
-
-                requestAnimationFrame(dirtyChecking);
+                dirty = false;
             };
 
             requestAnimationFrame(dirtyChecking);
@@ -174,6 +170,8 @@
 
                   lastWidth = cachedWidth;
                   lastHeight = cachedHeight;
+
+                  requestAnimationFrame(dirtyChecking);
               }
               reset();
             };
